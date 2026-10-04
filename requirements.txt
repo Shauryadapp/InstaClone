@@ -5,5 +5,5 @@ pydantic
 python-dotenv
 aiosqlite
 python-jose[cryptography]
-passlib[bcrypt]
+pwdlib[argon2]
 email-validator

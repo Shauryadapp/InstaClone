@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate
+from app.utils.security import hash_password
 
 
 router = APIRouter(
@@ -33,8 +34,11 @@ async def register(
             detail="Username or email already registered"
         )
 
+    hashed_password = hash_password(user.password)
+
     return {
-        "message": "User is available for registration!",
+        "message": "Password hashed successfully!",
         "username": user.username,
-        "email": user.email
+        "email": user.email,
+        "hashed_password": hashed_password
     }
