@@ -1,0 +1,22 @@
+# Virtual environment
+.instavenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+
+# SQLite database
+*.db
+
+# Uploaded files
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
