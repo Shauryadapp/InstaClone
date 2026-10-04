@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.schemas.user import UserCreate
 
 
 router = APIRouter(
@@ -8,5 +9,9 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register():
-    return {"message": "Registration endpoint works!"}
+async def register(user: UserCreate):
+    return {
+        "message": "Registration data received!",
+        "username": user.username,
+        "email": user.email
+    }
