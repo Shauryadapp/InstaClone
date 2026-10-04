@@ -36,9 +36,23 @@ async def register(
 
     hashed_password = hash_password(user.password)
 
+    new_user = User(
+        username=user.username,
+        email=user.email,
+        hashed_password=hashed_password
+    )
+
+    db.add(new_user)
+
+    await db.commit()
+
+    await db.refresh(new_user)
+
     return {
-        "message": "Password hashed successfully!",
-        "username": user.username,
-        "email": user.email,
-        "hashed_password": hashed_password
+        "message": "User registered successfully!",
+        "user": {
+            "id": new_user.id,
+            "username": new_user.username,
+            "email": new_user.email
+        }
     }
