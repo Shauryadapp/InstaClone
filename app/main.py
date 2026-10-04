@@ -1,8 +1,27 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
-app = FastAPI(title="Instagram Clone API")
+from app.database import Base, engine
+from app.models.user import User
+from app.routers.auth import router as auth_router
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield
+
+
+app = FastAPI(
+    title="Instagram Clone API",
+    lifespan=lifespan,
+)
+
+app.include_router(auth_router)
 
 @app.get("/")
-def home():
+async def home():
     return {"message": "Instagram Clone API is running!"}
