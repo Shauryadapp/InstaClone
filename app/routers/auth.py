@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
 from app.schemas.user import UserCreate
 
 
@@ -9,9 +12,12 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register(user: UserCreate):
+async def register(
+    user: UserCreate,
+    db: AsyncSession = Depends(get_db)
+):
     return {
-        "message": "Registration data received!",
+        "message": "Database connection received!",
         "username": user.username,
         "email": user.email
     }
