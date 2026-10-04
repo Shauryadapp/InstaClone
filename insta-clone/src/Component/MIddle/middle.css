@@ -1,0 +1,270 @@
+.middle {
+  width: 600px;
+
+  margin-left: 1px ;
+
+  padding-top: 20px;
+}
+
+
+/* =========================
+   STORIES
+========================= */
+
+.stories {
+  display: flex;
+
+  gap: 18px;
+
+  margin-bottom: 30px;
+
+  margin-left: 29px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+}
+
+
+.story {
+  width: 70px;
+
+  flex-shrink: 0;
+
+  text-align: center;
+}
+
+
+.story img {
+  width: 62px;
+  height: 62px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  padding: 2px;
+
+  border: 2px solid #ff3040;
+}
+
+
+.story p {
+  margin-top: 6px;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================
+   POST
+========================= */
+
+.post {
+  width: 540px;
+
+  margin: 0 auto 40px;
+}
+
+
+/* POST HEADER */
+
+.post-header {
+  height: 55px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  
+}
+
+
+.post-user {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.post-user img {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid #ff3040;
+  
+  cursor: pointer;
+}
+
+
+.post-user strong {
+  font-size: 14px;
+}
+
+
+.post-user span {
+  color: #737373;
+
+  font-size: 14px;
+}
+
+
+.follow-button {
+  background: #efefef;
+
+  border: none;
+
+  margin-left: 230px; 
+
+  padding: 9px 17px;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.three-dot img{
+  height:15px;
+  width: 14px;
+  
+  
+}
+
+
+/* =========================
+   POST IMAGE
+========================= */
+
+.post-image {
+  width: 540px;
+
+  height: 700px;
+
+  border-radius: 5px;
+
+  overflow: hidden;
+
+  background: #eee;
+}
+
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.post-actions {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-top: 12px;
+}
+.post-actions button img{
+  height:20px;
+}
+
+
+.left-actions {
+  display: flex;
+
+  gap: 16px;
+}
+
+
+.post-actions button {
+  border: none;
+
+  background: none;
+
+  font-size: 28px;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+}
+
+.left-actions button img{
+  height:20px;
+
+}
+
+
+.post-actions button:hover {
+  transform: scale(1.08);
+}
+
+
+/* =========================
+   LIKES
+========================= */
+
+.post-likes {
+  margin-top: 10px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =========================
+   CAPTION
+========================= */
+
+.caption {
+  display: flex;
+
+  gap: 7px;
+
+  margin-top: 7px;
+
+  font-size: 14px;
+}
+
+
+.caption strong {
+  font-weight: 600;
+}
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+.comments {
+  margin-top: 8px;
+
+  color: #737373;
+
+  font-size: 14px;
+}

@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+.App {
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex:0.2;
+  min-height: 100vh;
+}
+
+.leftsidehome {
+  flex:0.1;
+  width: 200px;
+}
+
+.middleside {
+  flex: 0.4;
+
+  padding: 20px;
+}
+
+.rightside {
+  flex:0.4;
+  width: 350px;
+  margin-left:24px;
+  padding: 20px;
+}

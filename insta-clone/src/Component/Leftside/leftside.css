@@ -1,0 +1,180 @@
+.leftside {
+  height: 100vh;
+
+  padding: 30px 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  border-right: 1px solid white;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 100px;
+
+  background-color: white;
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+
+}
+
+.logo {
+  width: 100px;
+  height:80px;
+  
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 35px;
+
+  overflow:hidden;
+  white-space: nowrap;
+
+}
+.logo img{
+  height:25px;
+  margin-bottom: 45px;
+  margin-right: 69px;
+}
+
+.navlink {
+ width: 50px;
+ height: 50px;
+ background-color: white;
+
+ display: flex;
+ direction: column;
+ align-items: center;
+
+ position: relative;
+
+ border-radius: 10px;
+
+ cursor: pointer;
+
+ margin-bottom: 5px;
+
+ transition: 0.2s;
+
+
+}
+.navlink img{
+  width:25px;
+  height:25px;
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+.navlink span{
+  position:absolute;
+
+  left:60px;
+  top:50%;
+  transform: translateY(-50%);
+  background-color: #f2f2f2;
+  padding: 8px 14px;
+  border: none;
+  border-radius:8px;
+  font-size: 20px;
+  font-weight:150;
+  white-space: nowrap;
+  opacity: 10;
+  visibility: hidden;
+  transition: 0.2s;
+  z-index: 1000;
+}
+.navlink:hover{
+  background-color: #f2f2f2;
+  
+
+}
+.navlink:hover img {
+  transform: scale(1.1);
+ 
+  
+}
+.navlink:hover span {
+  opacity: 1;
+  font-weight: 600;
+  visibility: visible;
+
+  transform: translateY(-50%) translateX(5px);
+}
+.navlinkfooter1 img{
+  margin-bottom: 10px;
+  margin-top: 180px;
+  width:25px;
+  height:25px;
+  object-fit: contain;
+  transition: transform 0.2s;
+
+}
+.navlinkfooter1 span{
+  position:absolute;
+  margin-top: 270px;
+  left:60px;
+  top:50%;
+  transform: translateY(-50%);
+  background-color: #f2f2f2;
+  padding: 8px 14px;
+  border: none;
+  border-radius:8px;
+  font-size: 20px;
+  font-weight:150;
+  white-space: nowrap;
+  opacity: 10;
+  visibility: hidden;
+  transition: 0.2s;
+  z-index: 1000;
+}
+.navlinkfooter1:hover{
+  background-color: #f2f2f2;
+}
+.navlinkfooter1:hover span {
+  opacity: 1;
+  font-weight: 600;
+  visibility: visible;
+
+  transform: translateY(-50%) translateX(5px);
+}
+.navlinkfooter2 img{
+ 
+  margin-top: 10px;
+  width:25px;
+  height:25px;
+  object-fit: contain;
+  transition: transform 0.2s;
+
+}
+.navlinkfooter2 span{
+  position:absolute;
+
+  left:60px;
+  top:50%;
+  transform: translateY(-50%);
+  background-color: #f2f2f2;
+  padding: 8px 14px;
+  border: none;
+  border-radius:8px;
+  font-size: 20px;
+  font-weight:150;
+  white-space: nowrap;
+  opacity: 10;
+  visibility: hidden;
+  transition: 0.2s;
+  z-index: 1000;
+}
+.navlinkfooter2:hover{
+  background-color: #f2f2f2;
+}
+.navlinkfooter2:hover span {
+  opacity: 1;
+  font-weight: 600;
+  visibility: visible;
+
+  transform: translateY(-50%) translateX(5px);
+}

@@ -1,0 +1,220 @@
+.right-container {
+  width: 330px;
+
+  padding-top: 30px;
+
+  padding-left: 20px;
+
+  padding-right: 20px;
+}
+
+
+/* =========================
+   CURRENT USER
+========================= */
+
+.current-user {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+}
+
+
+.current-user-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.current-user-info img {
+  width: 55px;
+  height: 55px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+
+.current-user-info div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.current-user-info strong {
+  font-size: 14px;
+}
+
+
+.current-user-info span {
+  color: #737373;
+
+  font-size: 14px;
+}
+
+
+.switch-btn {
+  color: #3856ff;
+
+  border:none;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+}
+
+
+/* =========================
+   SUGGESTED HEADING
+========================= */
+
+.suggested-heading {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+
+.suggested-heading strong {
+  color: #737373;
+
+  font-size: 14px;
+}
+
+
+.suggested-heading button {
+  font-size: 13px;
+
+  border:none;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+}
+
+
+/* =========================
+   SUGGESTIONS
+========================= */
+
+.suggestion {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+
+.suggestion-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+
+.suggestion-info img {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+
+.suggestion-info div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 0;
+}
+
+
+.suggestion-info strong {
+  font-size: 14px;
+}
+
+
+.suggestion-info span {
+  color: #737373;
+
+  font-size: 12px;
+
+  max-width: 170px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.follow-btn {
+  color: #3856ff;
+
+  border:none;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.right-footer {
+  margin-top: 40px;
+
+  color: #c7c7c7;
+
+  font-size: 11px;
+
+  line-height: 1.8;
+
+  margin-top:800px;
+}
+
+
+.right-footer span {
+  display: block;
+
+  margin-top: 15px;
+}
