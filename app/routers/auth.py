@@ -84,9 +84,16 @@ async def login(
             detail="Invalid username/email or password"
         )
 
+    access_token = create_access_token(
+        data={"sub": str(existing_user.id)}
+    )
+
     return {
-        "message": "Login successful",
-        "user_id": existing_user.id,
-        "username": existing_user.username,
-        "email": existing_user.email
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": existing_user.id,
+            "username": existing_user.username,
+            "email": existing_user.email
+        }
     }
