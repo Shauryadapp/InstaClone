@@ -19,3 +19,8 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserProfileUpdate(BaseModel):
+    username: str | None = None
+    email: EmailStr | None = None
