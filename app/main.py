@@ -52,3 +52,19 @@ app.include_router(follows.router)
 @app.get("/")
 async def home():
     return {"message": "Instagram Clone API is running!"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.get("/shaurya_rand_ka_pilla")
+async def shaurya_rand_ka_pilla():
+    return {"message": "Shaurya Rand Ka Pilla is running!"}
