@@ -6,17 +6,17 @@ const Rightside = () => {
   const suggestions = [
     {
       username: "Thakur",
-      image: "atul-image-1.jpeg",
+      image: "profile-icon.png",
       text: "Followed by sa farxfeelings"
     },
     {
       username: "Yash Singh",
-      image: "atul-image-1.jpeg ",
+      image: "profile-icon.png ",
       text: "Suggested for you"
     },
     {
       username: "Harsh",
-      image: "atul-image-1.jpeg ",
+      image: "profile-icon.png",
       text: "Suggested for you"
     }
   ];
@@ -31,7 +31,7 @@ const Rightside = () => {
         <div className="current-user-info">
 
           <img
-            src="atul-image-1.jpeg "
+            src="profile-icon.png "
             alt="profile"
           />
 
@@ -122,9 +122,14 @@ const Rightside = () => {
         <span>
           © 2026 INSTAGRAM CLONE
         </span>
-
       </div>
-
+      
+        {/* FLOATING MESSAGES BUTTON */}
+      <button className="floating-messages" type="button">
+        <span className="messages-icon">➤</span>
+        <strong>Messages</strong>
+        <img src="/profile-icon.png" alt="Profile" />
+      </button>
     </div>
   );
 };

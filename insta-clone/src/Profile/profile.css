@@ -1,0 +1,1048 @@
+
+/* ================= GLOBAL STYLES ================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.profile-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+.profile-status {
+  padding: 30px;
+  font-size: 16px;
+}
+
+/* ================= LEFT SIDEBAR ================= */
+
+.profile-sidebar {
+  height: 100vh;
+  padding: 30px 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  border-right: 1px solid #dbdbdb;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 100px;
+  background-color: white;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+/* Instagram logo */
+
+.profile-instagram-logo {
+  width: 100px;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 35px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.profile-instagram-logo img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+
+  margin-bottom: 45px;
+  margin-right: 69px;
+}
+
+/* Main navigation */
+
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-nav-item {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background-color 0.2s, width 0.2s;
+}
+
+/* Sidebar icons */
+
+.profile-nav-item img {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+
+/* Sidebar labels */
+
+.profile-nav-item > span:not(.nav-symbol) {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+
+  background-color:#f2f2f2;
+
+  font-size: 20px;
+  font-weight: 150;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 1001;
+}
+
+/* Hover effects — like the Home sidebar */
+
+.profile-nav-item:hover {
+  width: 150px;
+  background-color: #f2f2f2;
+}
+
+.profile-nav-item:hover img {
+  transform: scale(1.1);
+}
+
+.profile-nav-item:hover > span:not(.nav-symbol) {
+  opacity: 1;
+  font-weight: 600;
+  visibility: visible;
+
+  transform: translateY(-50%) translateX(5px);
+}
+
+/* Active profile icon */
+
+.profile-nav-item.active-profile {
+  background-color: white;
+}
+
+.profile-nav-item.active-profile:hover {
+  background-color: #f2f2f2;
+}
+
+/* Bottom navigation */
+
+.profile-bottom-nav {
+  margin-top: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.profile-nav-item .nav-symbol {
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ================= MAIN PROFILE CONTENT ================= */
+
+.profile-content {
+  width: min(1300px, calc(100% - 100px));
+  min-height: 100vh;
+
+  margin-left: 100px;
+  padding: 55px 35px 30px;
+}
+
+/* ================= PROFILE HEADER ================= */
+
+.profile-header {
+  width: min(800px, 100%);
+  min-height: 155px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 32px;
+}
+
+/* Profile picture and note */
+
+.profile-image-container {
+  position: relative;
+  /* width: 200px;
+  height: 200px; */
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 176px;
+  height: 176px;
+
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #efefef;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.profile-note {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 10px 12px;
+  border-radius: 15px;
+
+  background-color: white;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.12);
+
+  color: #777;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ================= PROFILE INFORMATION ================= */
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-username-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.profile-username-row h1 {
+  margin: 0;
+
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.3;
+
+  overflow-wrap: anywhere;
+}
+
+.profile-settings {
+  font-size: 25px;
+  cursor: pointer;
+}
+.profile-settings img{
+  height:20px;
+  margin: 3px;
+}
+
+.profile-display-name {
+  margin-bottom: 1px;
+  font-size: 16px;
+}
+.profile-email {
+  display: block;
+  margin-top: 1px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #737373;
+  font-weight: 400;
+}
+
+/* ================= PROFILE STATS ================= */
+
+.profile-stats {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  font-size: 16px;
+}
+
+.profile-stats div {
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.profile-stats strong {
+  font-weight: 600;
+}
+
+/* ================= PROFILE BUTTONS ================= */
+
+.profile-buttons {
+  width: min(800px, 100%);
+
+  margin: 28px auto 0;
+
+  display: flex;
+  gap: 10px;
+}
+
+.profile-buttons button {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+
+  border: none;
+  border-radius: 12px;
+
+  background-color: #eff0f3;
+  color: #000;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-buttons button:hover {
+  background-color: #e2e2e5;
+}
+
+/* ================= STORY HIGHLIGHT ================= */
+
+.profile-story-section {
+  width: min(800px, 100%);
+  margin: 48px auto 25px;
+
+  display: flex;
+  align-items: center;
+}
+
+.new-story {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.new-story-circle {
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 4px solid #e0e3e7;
+  border-radius: 50%;
+
+  color: #c7c7c7;
+  font-size: 58px;
+  font-weight: 200;
+
+  transition: background-color 0.2s;
+}
+
+.new-story:hover .new-story-circle {
+  background-color: #f7f7f7;
+}
+
+/* ================= PROFILE TABS ================= */
+
+.profile-tabs {
+  width: min(1300px, 100%);
+
+  margin: 25px auto 0;
+  border-bottom: 1px solid #dbdbdb;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-tabs button {
+  width: 33.333%;
+  max-width: 250px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+
+  background: transparent;
+  color: #8e8e8e;
+
+  cursor: pointer;
+}
+
+.profile-tabs button.active {
+  color: #000;
+  border-bottom-color: #000;
+}
+
+.profile-tabs svg {
+  width: 25px;
+  height: 25px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.profile-tabs button:first-child svg rect {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* ================= EMPTY PROFILE STATE ================= */
+
+.empty-profile {
+  min-height: 290px;
+  padding: 48px 15px 35px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  text-align: center;
+}
+
+.empty-camera {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1.5px solid #262626;
+  border-radius: 50%;
+  margin-bottom: 23px;
+}
+
+.empty-camera svg {
+  width: 43px;
+  height: 43px;
+
+  fill: none;
+  stroke: #262626;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.empty-profile h2 {
+  margin: 0 0 18px;
+
+  font-size: 32px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.empty-profile p {
+  margin: 0;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ================= MESSAGES PILL ================= */
+
+.profile-messages {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+
+  min-width: 290px;
+  height: 66px;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  border: none;
+  border-radius: 40px;
+
+  background-color: white;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.18);
+
+  color: #111;
+  cursor: pointer;
+  z-index: 900;
+}
+
+.profile-messages .messages-icon {
+  font-size: 28px;
+  transform: rotate(20deg);
+}
+
+.profile-messages strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.profile-messages img {
+  width: 30px;
+  height: 30px;
+
+  object-fit: cover;
+  border-radius: 50%;
+
+  margin-left: auto;
+}
+
+/* ================= LOGOUT BUTTON ================= */
+
+.logout-button {
+  position: fixed;
+  right: 30px;
+  top: 25px;
+
+  padding: 10px 18px;
+
+  border: 1px solid #ed4956;
+  border-radius: 8px;
+
+  background-color: white;
+  color: #ed4956;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s;
+
+  z-index: 1100;
+}
+
+.logout-button:hover {
+  background-color: #ed4956;
+  color: white;
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width: 1000px) {
+  .profile-content {
+    width: calc(100% - 100px);
+    padding: 45px 25px 25px;
+  }
+
+  .profile-header,
+  .profile-buttons,
+  .profile-story-section {
+    width: min(700px, 100%);
+  }
+
+  .profile-image-container,
+  .profile-image {
+    width: 140px;
+    height: 140px;
+  }
+
+  .profile-header {
+    gap: 25px;
+  }
+
+  .profile-username-row h1 {
+    font-size: 23px;
+  }
+
+  .profile-stats {
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  .profile-tabs {
+    width: 100%;
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+  .profile-sidebar {
+    width: 65px;
+    padding: 20px 10px;
+  }
+
+  .profile-instagram-logo {
+    width: 45px;
+    margin-bottom: 25px;
+  }
+
+  .profile-instagram-logo img {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .profile-nav-item:hover {
+    width: 50px;
+  }
+
+  .profile-nav-item > span:not(.nav-symbol) {
+    left: 45px;
+    font-size: 15px;
+  }
+
+  .profile-content {
+    width: calc(100% - 65px);
+    margin-left: 65px;
+    padding: 35px 12px 20px;
+  }
+
+  .profile-header {
+    align-items: flex-start;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  .profile-image-container,
+  .profile-image {
+    width: 85px;
+    height: 85px;
+  }
+
+  .profile-note {
+    top: -20px;
+    font-size: 11px;
+    padding: 7px 9px;
+  }
+
+  .profile-username-row {
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .profile-username-row h1 {
+    font-size: 17px;
+  }
+
+  .profile-settings {
+    font-size: 20px;
+  }
+
+  .profile-display-name {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .profile-stats {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .profile-stats div {
+    gap: 3px;
+  }
+
+  .profile-buttons {
+    gap: 6px;
+    margin-top: 25px;
+  }
+
+  .profile-buttons button {
+    height: 40px;
+    padding: 0 5px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .profile-story-section {
+    margin-top: 35px;
+  }
+
+  .new-story-circle {
+    width: 75px;
+    height: 75px;
+    font-size: 45px;
+  }
+
+  .profile-tabs {
+    margin-top: 20px;
+  }
+
+  .profile-tabs button {
+    height: 50px;
+  }
+
+  .profile-tabs svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .empty-profile {
+    min-height: 250px;
+    padding: 40px 8px 25px;
+  }
+
+  .empty-camera {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+  }
+
+  .empty-camera svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .empty-profile h2 {
+    font-size: 25px;
+    margin-bottom: 12px;
+  }
+
+  .empty-profile p {
+    font-size: 13px;
+  }
+
+  .profile-messages {
+    right: 12px;
+    bottom: 12px;
+
+    min-width: auto;
+    width: 55px;
+    height: 55px;
+    padding: 0;
+
+    justify-content: center;
+  }
+
+  .profile-messages strong,
+  .profile-messages img {
+    display: none;
+  }
+
+  .logout-button {
+    top: 12px;
+    right: 12px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ================= VERY SMALL SCREENS ================= */
+
+@media (max-width: 380px) {
+  .profile-content {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .profile-header {
+    gap: 10px;
+  }
+
+  .profile-image-container,
+  .profile-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-username-row h1 {
+    font-size: 15px;
+  }
+
+  .profile-stats {
+    flex-wrap: wrap;
+    gap: 5px 9px;
+  }
+
+  .profile-buttons button {
+    font-size: 11px;
+  }
+
+  .empty-profile h2 {
+    font-size: 22px;
+  }
+}
+
+
+.profile-post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.profile-post-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: #f2f2f2;
+}
+
+.profile-post-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+
+.profile-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  margin: 24px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.profile-edit-form h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.profile-edit-form label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-edit-form input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.profile-edit-form button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #0095f6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-edit-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.profile-edit-form p,
+.profile-notice {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+
+
+.profile-stat-button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.profile-stat-button:hover {
+  text-decoration: underline;
+}
+
+.follow-list-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.follow-list-modal {
+  width: 100%;
+  max-width: 400px;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: #fff;
+  color: #262626;
+  border-radius: 12px;
+}
+
+.follow-list-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.follow-list-header h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+}
+
+.follow-list-header button {
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.follow-list-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.follow-list-user:hover {
+  background: #f7f7f7;
+}
+
+.follow-list-avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e8e8e8;
+  font-weight: 600;
+}
+
+.follow-list-message {
+  padding: 24px 16px;
+  text-align: center;
+  color: #737373;
+}
+
+.profile-post-card {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+
+.profile-picture-upload-button {
+    display: inline-block;
+    margin-top: 12px;
+    margin-left: 20px;
+    padding: 3px 7px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #262626;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .profile-picture-upload-button:hover {
+    background: #f5f5f5;
+  }
+
+  .profile-picture-upload-button:has(+ input:disabled) {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .profile-picture-notice {
+    max-width: 260px;
+    margin-top: 8px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-image img {
+   
+    width: 100%;
+    height:100%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+
+  .default-profile-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: #e5e5e5;
+  color: #555;
+  font-size: 48px;
+  font-weight: 600;
+ 
+}

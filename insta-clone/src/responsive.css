@@ -1,0 +1,147 @@
+/* Responsive layout overrides for the Instagram clone */
+html, body, #root { width: 100%; min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-width: 320px; overflow-x: hidden; }
+img, video, canvas, svg { max-width: 100%; }
+button, input, textarea, select { font: inherit; }
+
+/* Home/feed layout */
+.App {
+  display: grid !important;
+  grid-template-columns: 100px minmax(0, 600px) minmax(250px, 320px);
+  gap: 24px;
+  align-items: start;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 18px 24px 100px;
+}
+.leftsidehome { width: 100px; min-width: 0; }
+.middleside { width: 100%; min-width: 0; padding: 20px 0; }
+.rightside { position: static !important; width: 100%; min-width: 0; margin: 0; padding: 20px 0; }
+.middle { width: 100%; max-width: 550px; min-width: 0; margin: 0 auto; padding: 0; }
+.post { width: 100%; max-width: 540px; min-width: 0; }
+.post-image { width: 100%; height: auto; aspect-ratio: 4 / 5; }
+.post-image img { width: 100%; height: 100%; object-fit: cover; }
+.stories { max-width: 100%; }
+.right-container { width: 100%; max-width: 330px; margin: 0; padding: 30px 0 0; }
+.floating-messages { max-width: calc(100vw - 24px); }
+
+/* Profile pages */
+.profile-page { min-height: 100vh; overflow-x: clip; }
+.profile-content { width: min(1300px, calc(100% - 100px)); min-width: 0; }
+.profile-header, .profile-tabs, .profile-post-grid { max-width: 100%; }
+.profile-post-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.profile-post-card { min-width: 0; aspect-ratio: 1 / 1; }
+.profile-post-card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Other pages and dialogs */
+.search-page, .notifications-page { width: 100%; min-width: 0; }
+.search-form input, .inbox-search input, .comment-form input, .comment-form textarea { min-width: 0; }
+.post-viewer-modal { min-width: 0; }
+.createpost-modal, .createpost-dialog, .follow-list-modal { max-width: calc(100vw - 24px); }
+
+@media (max-width: 1200px) {
+  .App { grid-template-columns: 84px minmax(0, 600px); gap: 18px; padding-left: 84px; }
+  .leftsidehome { width: 84px; }
+  .rightside { display: none; }
+}
+
+@media (max-width: 760px) {
+  .App {
+    display: block !important;
+    width: 100%;
+    min-height: 100vh;
+    padding: 0 0 72px;
+  }
+  .leftsidehome { width: 0; height: 0; }
+  .middleside { width: 100%; padding: 14px 0 24px; }
+  .middle { width: min(100%, 550px); padding: 0 12px; }
+  .post { margin-bottom: 28px; }
+  .post-header { gap: 8px; }
+  .follow-button { padding: 7px 10px; }
+
+  /* Compact bottom navigation on phones */
+  .leftside {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 62px !important;
+    padding: 5px 8px !important;
+    border-right: 0 !important;
+    border-top: 1px solid #dbdbdb;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-around;
+    gap: 4px;
+    z-index: 1500;
+  }
+  .leftside .logo, .leftside .navlinkfooter1, .leftside .navlinkfooter2, .leftside .navlinkfooter3 { display: none !important; }
+  .leftside .navlink { width: 44px !important; height: 44px !important; margin: 0 !important; justify-content: center; flex-shrink: 0; }
+  .leftside .navlink img { width: 24px; height: 24px; }
+  .leftside .navlink span { display: none !important; }
+
+  .profile-sidebar {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    padding: 4px 8px !important;
+    border-right: 0 !important;
+    border-top: 1px solid #dbdbdb;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1500;
+  }
+  .profile-instagram-logo, .profile-bottom-nav { display: none !important; }
+  .profile-nav { width: 100%; flex-direction: row !important; align-items: center; justify-content: space-around; gap: 2px; }
+  .profile-nav-item { width: 42px !important; height: 44px !important; margin: 0 !important; justify-content: center; }
+  .profile-nav-item:hover { width: 42px !important; }
+  .profile-nav-item > span:not(.nav-symbol) { display: none !important; }
+
+  .profile-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 28px 14px 80px !important;
+  }
+  .profile-header { gap: 18px; min-height: 0; align-items: center; }
+  .profile-image { width: clamp(76px, 23vw, 120px) !important; height: clamp(76px, 23vw, 120px) !important; }
+  .profile-stats { gap: 12px !important; flex-wrap: wrap; }
+  .profile-username-row { flex-wrap: wrap; gap: 8px; }
+  .profile-buttons { flex-wrap: wrap; }
+  .profile-post-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 2px; }
+  .profile-tabs { gap: 8px; }
+  .profile-tabs button { min-width: 0; padding: 12px 4px; font-size: 11px; }
+
+  .messages-page { padding-bottom: 0; }
+  .messages-sidebar { display: none !important; }
+  .messages-inbox { width: 100%; min-width: 0; margin-left: 0; padding: 20px 14px; border-right: 0; }
+  .messages-layout, .messages-content, .chat-panel { min-width: 0; max-width: 100%; }
+  .post-viewer-overlay { padding: 8px; }
+  .post-viewer-modal { width: 100%; max-width: 100%; border-radius: 8px; }
+  .search-page, .notifications-page { padding: 18px 12px 78px; }
+}
+
+@media (max-width: 480px) {
+  .middle { padding: 0 8px; }
+  .stories { gap: 11px; margin-bottom: 22px; }
+  .story { width: 62px; }
+  .story img { width: 56px; height: 56px; }
+  .post-user img { width: 36px; height: 36px; }
+  .post-user strong, .post-user span { font-size: 12px; }
+  .follow-button { padding: 6px 8px; font-size: 12px; }
+  .post-actions button img { width: 21px; height: 21px; }
+  .profile-header { gap: 12px; }
+  .profile-content { padding: 20px 8px 76px !important; }
+  .profile-tabs button { letter-spacing: 0; }
+  .search-header { gap: 10px; flex-wrap: wrap; }
+  .search-header h1 { font-size: 20px; }
+  .search-form button { padding: 10px 12px; }
+  .notification-item { align-items: flex-start; }
+  .post-viewer-overlay { padding: 0; }
+  .post-viewer-modal { max-height: 100dvh; border-radius: 0; }
+}

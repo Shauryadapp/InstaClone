@@ -1,5 +1,87 @@
+import { useState } from "react";
 import "./login.css";
-const Login = ({ onSignup }) => {
+import { API_ENDPOINTS } from "../api/api.js";
+
+const Login = ({ onSignup, onLogin }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  // ================= LOGIN =================
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!username || !password) {
+      setMessage("Please enter your username/email and password.");
+      setMessageType("error");
+      return;
+    }
+
+
+    try {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username_or_email: username,
+          password: password,
+        }),
+      });
+
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.detail || "Login failed.");
+        setMessageType("error");
+        return;
+      }
+
+      localStorage.setItem("access_token", data.access_token);
+
+      setMessage("Login successful! Welcome to Instagram.");
+      setMessageType("success");
+
+      setTimeout(() => {
+        onLogin();
+      }, 1000);
+
+    } catch (error) {
+      console.error("Login error:", error);
+
+      setMessage("Could not connect to the server.");
+      setMessageType("error");
+    }
+  };
+  // ================= FORGOT PASSWORD =================
+  const handleForgotPassword = () => {
+    if (!username) {
+      setMessage("Please enter your email or username first.");
+      setMessageType("error");
+      return;
+    }
+
+    setMessage(
+      `Password reset instructions have been sent for "${username}".`
+    );
+    setMessageType("success");
+  };
+
+  // ================= FACEBOOK =================
+  const handleFacebookLogin = () => {
+    setMessage("Facebook login selected.");
+    setMessageType("success");
+  };
+
+  // ================= META =================
+  const handleMetaClick = () => {
+    setMessage("You clicked Meta.");
+    setMessageType("success");
+  };
+
   return (
     <div className="login-page">
 
@@ -15,10 +97,8 @@ const Login = ({ onSignup }) => {
           />
         </div>
 
-
         {/* Heading */}
         <div className="login-heading">
-
           <h1>
             See everyday moments from your
           </h1>
@@ -26,9 +106,7 @@ const Login = ({ onSignup }) => {
           <h1 className="gradient-text">
             close friends.
           </h1>
-
         </div>
-
 
         {/* Instagram Images */}
         <div className="promo-images">
@@ -65,7 +143,6 @@ const Login = ({ onSignup }) => {
           </div>
 
         </div>
-
       </div>
 
 
@@ -79,54 +156,89 @@ const Login = ({ onSignup }) => {
             Log into Instagram
           </h2>
 
+          {/* Login Form */}
+          <form onSubmit={handleLogin}>
 
-          {/* Username */}
-          <input
-            type="text"
-            placeholder="Mobile number, username or email"
-          />
+            {/* Username */}
+            <input
+              type="text"
+              placeholder="Mobile number, username or email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+
+            {/* Password */}
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {/* Login */}
+            <button
+              type="submit"
+              className="login-button"
+            >
+              Log in
+            </button>
+
+          </form>
 
 
-          {/* Password */}
-          <input
-            type="password"
-            placeholder="Password"
-          />
+          {/* ================= MESSAGE ================= */}
 
-
-          {/* Login */}
-          <button className="login-button">
-            Log in
-          </button>
+          {message && (
+            <div className={`login-message ${messageType}`}>
+              {message}
+            </div>
+          )}
 
 
           {/* Forgot Password */}
-          <button className="forgot-password">
+          <button
+            type="button"
+            className="forgot-password"
+            onClick={handleForgotPassword}
+          >
             Forgot password?
           </button>
 
 
           {/* Facebook */}
-          <button className="facebook-login">
-            <span className="facebook-icon">f</span>
+          <button
+            type="button"
+            className="facebook-login"
+            onClick={handleFacebookLogin}
+          >
+            <span className="facebook-icon">
+              f
+            </span>
+
             Log in with Facebook
           </button>
 
 
           {/* Create Account */}
-          <button className="create-account"
-            onClick={onSignup}>
+          <button
+            type="button"
+            className="create-account"
+            onClick={onSignup}
+          >
             Create new account
-            </button>
+          </button>
 
 
           {/* Meta */}
-          <div className="meta-logo">
+          <button
+            type="button"
+            className="meta-logo"
+            onClick={handleMetaClick}
+          >
             ∞ Meta
-          </div>
+          </button>
 
         </div>
-
       </div>
 
 

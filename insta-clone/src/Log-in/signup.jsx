@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./signup.css";
-
+import { API_ENDPOINTS } from "../api/api.js";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,14 +17,16 @@ const Signup = () => {
 
     console.log("Sending:", userData);
 
+
     try {
-      const response = await fetch("http://192.168.1.12:8000/auth/register", {
+      const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
+
 
       const data = await response.json();
 
@@ -47,6 +49,15 @@ const Signup = () => {
 
   return (
     <div className="signup-page">
+
+      {/* Back to Login Button */}
+      <button
+        type="button"
+        className="back-login-btn"
+        onClick={() => window.location.href = "/login"}
+      >
+        ← Back to Login
+      </button>
 
       <div className="signup-box">
 

@@ -1,11 +1,14 @@
+
+/* =========================
+   MIDDLE FEED
+========================= */
+
 .middle {
-  width: 600px;
-
-  margin-left: 1px ;
-
+  width: 550px;
+  margin-left: 120px;
   padding-top: 20px;
+  box-sizing: border-box;
 }
-
 
 /* =========================
    STORIES
@@ -13,216 +16,181 @@
 
 .stories {
   display: flex;
-
-  gap: 18px;
-
+  gap: 16px;
   margin-bottom: 30px;
-
-  margin-left: 29px;
-
-  overflow: hidden;
-
+  overflow-x: auto;
+  overflow-y: hidden;
   cursor: pointer;
+  scrollbar-width: none;
 }
 
+.stories::-webkit-scrollbar {
+  display: none;
+}
 
 .story {
   width: 70px;
-
   flex-shrink: 0;
-
   text-align: center;
 }
-
 
 .story img {
   width: 62px;
   height: 62px;
-
   border-radius: 50%;
-
   object-fit: cover;
-
   padding: 2px;
-
   border: 2px solid #ff3040;
 }
 
-
 .story p {
   margin-top: 6px;
-
   font-size: 12px;
-
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 }
-
 
 /* =========================
    POST
 ========================= */
 
 .post {
-  width: 540px;
-
+  width: 100%;
+  max-width: 540px;
   margin: 0 auto 40px;
+  box-sizing: border-box;
 }
 
-
-/* POST HEADER */
+/* =========================
+   POST HEADER
+========================= */
 
 .post-header {
-  height: 55px;
-
+  min-height: 55px;
   display: flex;
-
   align-items: center;
-
-  justify-content: space-between;
-
+  gap: 12px;
   margin-bottom: 10px;
-
-  
 }
-
 
 .post-user {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
+  min-width: 0;
+  flex: 1;
 }
-
 
 .post-user img {
   width: 42px;
   height: 42px;
-
   border-radius: 50%;
-
   object-fit: cover;
-
   border: 2px solid #ff3040;
-  
   cursor: pointer;
+  flex-shrink: 0;
 }
-
 
 .post-user strong {
   font-size: 14px;
 }
 
-
 .post-user span {
   color: #737373;
-
   font-size: 14px;
 }
 
+/* Follow button */
 
 .follow-button {
   background: #efefef;
-
   border: none;
-
-  margin-left: 230px; 
-
+  margin-left: auto;
   padding: 9px 17px;
-
   border-radius: 8px;
-
   font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
 
+.follow-button:hover {
+  background: #e2e2e2;
+}
+
+.three-dot {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   cursor: pointer;
 }
 
-.three-dot img{
-  height:15px;
+.three-dot img {
+  height: 15px;
   width: 14px;
-  
-  
+  object-fit: contain;
+  border: none;
 }
-
 
 /* =========================
    POST IMAGE
 ========================= */
 
 .post-image {
-  width: 540px;
-
-  height: 700px;
-
+  width: 100%;
+  aspect-ratio: 4 / 5;
   border-radius: 5px;
-
   overflow: hidden;
-
   background: #eee;
 }
-
 
 .post-image img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-
   display: block;
 }
 
-
 /* =========================
-   ACTIONS
+   POST ACTIONS
 ========================= */
 
 .post-actions {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   padding-top: 12px;
 }
-.post-actions button img{
-  height:20px;
-}
-
 
 .left-actions {
   display: flex;
-
+  align-items: center;
   gap: 16px;
 }
 
-
 .post-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   border: none;
-
-  background: none;
-
+  background: transparent;
   font-size: 28px;
-
   cursor: pointer;
-
-  border-radius: 6px;
+  transition: transform 0.15s ease;
 }
 
-.left-actions button img{
-  height:20px;
-
+.post-actions button img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
 }
-
 
 .post-actions button:hover {
   transform: scale(1.08);
 }
-
 
 /* =========================
    LIKES
@@ -230,41 +198,165 @@
 
 .post-likes {
   margin-top: 10px;
-
   font-size: 14px;
-
   font-weight: 600;
 }
-
 
 /* =========================
    CAPTION
 ========================= */
 
 .caption {
-  display: flex;
-
-  gap: 7px;
-
+  display: block;
   margin-top: 7px;
-
   font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
-
 
 .caption strong {
   font-weight: 600;
+  margin-right: 5px;
 }
 
+.post-username-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.post-username-link:hover {
+  text-decoration: underline;
+}
 
 /* =========================
    COMMENTS
 ========================= */
 
 .comments {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 8px;
-
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
   color: #737373;
-
   font-size: 14px;
+}
+
+/* Comment input without a box */
+
+.comments input,
+.comments textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #262626;
+  font: inherit;
+}
+
+.comments input::placeholder,
+.comments textarea::placeholder {
+  color: #737373;
+}
+
+/* Remove the default box around the Post button */
+
+.comments button {
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #0095f6;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comments button:hover {
+  background: transparent;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .middle {
+    width: min(540px, calc(100vw - 150px));
+    margin-left: 120px;
+  }
+
+  .post {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .middle {
+    width: 100%;
+    margin-left: 0;
+    padding: 12px;
+    padding-bottom: 70px;
+  }
+
+  .stories {
+    gap: 12px;
+  }
+
+  .post {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .post-image {
+    aspect-ratio: 4 / 5;
+  }
+
+  .left-actions {
+    gap: 13px;
+  }
+}
+/* Remove comment input box background and border */
+.comments input,
+.comments textarea,
+.comment-input {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  color: inherit;
+}
+
+/* Remove Post button box styling */
+.comments button,
+.post-comment-button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Keep the original white page background */
+.middle,
+.post {
+  background: transparent;
 }

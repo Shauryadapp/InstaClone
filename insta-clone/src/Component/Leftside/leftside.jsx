@@ -1,7 +1,7 @@
 
 import "./leftside.css";
 
-const Leftside = () => {
+const Leftside = ({ onProfile, onCreateClick, onSearch, onMessages, onNotifications }) => {
 
   return (
     <div className="leftside">
@@ -12,42 +12,55 @@ const Leftside = () => {
 
       <div className="navlink">
         
-          <img src="https://i.pinimg.com/736x/89/ba/d7/89bad76e046bfe194abbaeb7e40adda3.jpg" alt="" />
+          <img src="home-icon.png" alt="" />
           <span>Home</span>
          
       </div>
 
-      <div className="navlink">
-        <img src="https://i.pinimg.com/736x/60/35/64/603564da9e25a8bda92ddd181fd9d37d.jpg" alt="" />
+      {/* <div className="navlink">
+        <img src="reelicon.png" alt="" />
         <span>Reel</span>
-      </div>
+      </div> */}
       
-      <div className="navlink">
+      <div className="navlink" onClick={onMessages} >
         <img src="message-icons.png" alt="" />
         <span>Messages</span>
       </div>
 
-      <div className="navlink">
+      <div className="navlink" onClick= {onSearch}>
         <img src="search-icon.png" alt="" />
         <span>Search</span>
       </div>
 
-      <div className="navlink">
-         <img src="notification-icon.png" alt="" />
+      <div className="navlink" onClick={onNotifications}>
+         <img src="notification-icon1.png" alt="" />
        <span> Notifications</span>
       </div>
 
-      <div className="navlink">
+      <div className="navlink"
+           onClick= {() => {
+            console.log("CREATE CLICKED");
+            onCreateClick();
+           }}>
+
         <img src="create-icon.png" alt="" />
         <span> Create</span>
       </div>
 
-      <div className="navlinkfooter1">
+     
+
+      <div className="navlink"
+          onClick={onProfile}
+>
         <img src="profile-icon.png" alt="" />
         <span>Profile</span>
       </div>
 
-      <div className="navlinkfooter2">
+       <div className="navlinkfooter1">
+        
+      </div>
+      
+      <div className="navlinkfooter3">
         <img src="more-icon.png" alt="" />
         <span>More</span>
       </div>
