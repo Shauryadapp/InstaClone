@@ -1,5 +1,11 @@
 fastapi
 uvicorn
-sqlalchemy
+sqlalchemy[asyncio]
 pydantic
 python-dotenv
+aiosqlite
+python-jose[cryptography]
+pwdlib[argon2]
+email-validator
+python-multipart
+asyncpg
