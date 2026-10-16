@@ -1,0 +1,33 @@
+@import "./profile.css";
+
+/* Match the Edit Profile button style in Profile.jsx */
+.public-follow-btn {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 12px;
+  background-color: #0095f6;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.public-follow-btn:hover {
+  background-color: #1877f2;
+}
+
+.public-follow-btn.following {
+  background-color: #eff0f3;
+  color: #000000;
+}
+
+.public-follow-btn.following:hover {
+  background-color: #e2e2e5;
+}
+
+.public-follow-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
