@@ -6,6 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.follow import Follow
 from app.models.user import User
+from app.routers.notifications import create_notification
+
+
 from app.utils.dependencies import get_current_user
 
 
@@ -73,7 +76,7 @@ async def follow_user(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    await get_user_or_404(user_id, db)
+    followed_user = await get_user_or_404(user_id, db)
 
     if user_id == current_user.id:
         raise HTTPException(
@@ -90,12 +93,21 @@ async def follow_user(
     existing_follow = result.scalar_one_or_none()
 
     if existing_follow is None:
-        db.add(
-            Follow(
-                follower_id=current_user.id,
-                followed_id=user_id,
-            )
+        new_follow = Follow(
+            follower_id=current_user.id,
+            followed_id=followed_user.id,
         )
+
+        db.add(new_follow)
+
+        await create_notification(
+            db=db,
+            recipient_id=followed_user.id,
+            sender_id=current_user.id,
+            notification_type="follow",
+            message=f"{current_user.username} started following you.",
+        )
+
         await db.commit()
 
     return {

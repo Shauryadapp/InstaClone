@@ -2,11 +2,14 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
-from sqlalchemy import select, func
+from sqlalchemy import select, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.post import Post, Like, Comment
+
+from app.routers.notifications import create_notification
+
 from app.models.user import User
 from app.schemas.post import PostResponse, PostUpdate, CommentCreate, CommentResponse, LikeActionResponse
 from app.utils.dependencies import get_current_user
@@ -184,45 +187,70 @@ async def get_post(
 
 
 
+
 @router.delete("/{post_id}")
 async def delete_post(
     post_id: int,
     current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
+    # 1. Find the post
     result = await db.execute(
         select(Post).where(Post.id == post_id)
     )
-
     post = result.scalar_one_or_none()
 
+    # 2. Check whether the post exists
     if post is None:
         raise HTTPException(
             status_code=404,
-            detail="Post not found"
+            detail="Post not found",
         )
 
+    # 3. Check post ownership
     if post.user_id != current_user.id:
         raise HTTPException(
             status_code=403,
-            detail="You are not allowed to delete this post"
+            detail="You are not allowed to delete this post",
         )
 
-    # Delete the image file
+    # 4. Save the image path before deleting the database record
     image_path = Path(post.image)
 
-    if image_path.exists():
-        image_path.unlink()
+    # 5. Delete related records and the post in one transaction
+    try:
+        await db.execute(
+            delete(Like).where(Like.post_id == post_id)
+        )
 
-    # Delete the database record
-    await db.delete(post)
+        await db.execute(
+            delete(Comment).where(Comment.post_id == post_id)
+        )
 
-    await db.commit()
+        await db.delete(post)
+        await db.commit()
 
+    except Exception:
+        await db.rollback()
+        raise
+
+    # 6. Delete the image only after the database commit succeeds
+    try:
+        if image_path.is_file():
+            image_path.unlink()
+
+    except OSError:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "Could not remove deleted post image: %s",
+            image_path,
+        )
+
+    # 7. Return the success response
     return {
         "message": "Post deleted successfully"
     }
-
 
 
 @router.put("/{post_id}", response_model=PostResponse)
@@ -306,6 +334,16 @@ async def like_post(
     )
 
     db.add(new_like)
+
+    await create_notification(
+    db=db,
+    recipient_id=post.user_id,
+    sender_id=current_user.id,
+    notification_type="like",
+    message=f"{current_user.username} liked your post.",
+    post_id=post.id,
+    )
+
     await db.commit()
 
     return {
@@ -392,6 +430,16 @@ async def create_comment(
     )
 
     db.add(new_comment)
+
+    await create_notification(
+    db=db,
+    recipient_id=post.user_id,
+    sender_id=current_user.id,
+    notification_type="comment",
+    message=f"{current_user.username} commented on your post.",
+    post_id=post.id,
+)
+
     await db.commit()
     await db.refresh(new_comment)
 
