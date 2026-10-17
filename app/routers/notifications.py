@@ -3,11 +3,13 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.models.user import User
 from app.models.notifications import Notification
 from app.schemas.notification import NotificationResponse
 from app.utils.dependencies import get_current_user
 
 router = APIRouter(prefix="/notifications", tags=["Notifications"])
+
 
 
 @router.get("/", response_model=list[NotificationResponse])
@@ -16,11 +18,34 @@ async def get_notifications(
     current_user=Depends(get_current_user),
 ):
     result = await db.execute(
-        select(Notification)
+        select(
+            Notification,
+            User.username,
+            User.profile_picture,
+        )
+        .join(User, Notification.sender_id == User.id)
         .where(Notification.recipient_id == current_user.id)
         .order_by(Notification.created_at.desc())
     )
-    return result.scalars().all()
+
+    rows = result.all()
+
+    return [
+        {
+            "id": notification.id,
+            "recipient_id": notification.recipient_id,
+            "sender_id": notification.sender_id,
+            "sender_username": username,
+            "sender_profile_picture": profile_picture,
+            "type": notification.type,
+            "post_id": notification.post_id,
+            "message": notification.message,
+            "is_read": notification.is_read,
+            "created_at": notification.created_at,
+        }
+        for notification, username, profile_picture in rows
+    ]
+
 
 
 @router.get("/unread-count")

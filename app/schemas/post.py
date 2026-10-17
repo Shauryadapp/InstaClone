@@ -7,6 +7,7 @@ class PostResponse(BaseModel):
     id: int
     user_id: int
     username: str | None = None
+    profile_picture: str | None = None
     image: str
     image_url: str
     caption: str | None
@@ -29,6 +30,7 @@ class CommentResponse(BaseModel):
     post_id: int
     user_id: int
     username: str
+    profile_picture: str | None = None
     content: str
     created_at: datetime
 

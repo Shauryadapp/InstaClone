@@ -140,6 +140,7 @@ async def list_conversations(
             "other_user": {
                 "id": other_user.id,
                 "username": other_user.username,
+                "profile_picture": other_user.profile_picture,
             } if other_user else None,
             "latest_message": {
                 "id": latest_message.id,
@@ -192,6 +193,8 @@ async def send_message(
         "id": message.id,
         "conversation_id": message.conversation_id,
         "sender_id": message.sender_id,
+        "sender_username": current_user.username,
+        "sender_profile_picture": current_user.profile_picture,
         "content": message.content,
         "is_read": message.is_read,
         "created_at": message.created_at,
@@ -212,21 +215,24 @@ async def get_messages(
     )
 
     result = await db.execute(
-        select(Message)
+        select(Message, User.username, User.profile_picture)
+        .join(User, Message.sender_id == User.id)
         .where(Message.conversation_id == conversation_id)
         .order_by(Message.created_at.asc(), Message.id.asc())
     )
 
-    messages = result.scalars().all()
+    rows = result.all()
 
     return [
-        {
-            "id": message.id,
-            "conversation_id": message.conversation_id,
-            "sender_id": message.sender_id,
-            "content": message.content,
-            "is_read": message.is_read,
-            "created_at": message.created_at,
-        }
-        for message in messages
-    ]
+    {
+        "id": row[0].id,
+        "conversation_id": row[0].conversation_id,
+        "sender_id": row[0].sender_id,
+        "sender_username": row[1],
+        "sender_profile_picture": row[2],
+        "content": row[0].content,
+        "is_read": row[0].is_read,
+        "created_at": row[0].created_at,
+    }
+    for row in rows
+]
