@@ -1,29 +1,43 @@
+
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Request,
+    UploadFile,
+)
 from sqlalchemy import select, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.post import Post, Like, Comment
-
-from app.routers.notifications import create_notification
-
 from app.models.user import User
-from app.schemas.post import PostResponse, PostUpdate, CommentCreate, CommentResponse, LikeActionResponse
+from app.routers.notifications import create_notification
+from app.schemas.post import (
+    PostResponse,
+    PostUpdate,
+    CommentCreate,
+    CommentResponse,
+    LikeActionResponse,
+)
 from app.utils.dependencies import get_current_user
 
 
 router = APIRouter(
     prefix="/posts",
-    tags=["Posts"]
+    tags=["Posts"],
 )
 
 
 def build_image_url(request: Request, image_path: str) -> str:
     filename = Path(image_path).name
     return str(request.base_url).rstrip("/") + f"/uploads/{filename}"
+
 
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
@@ -32,7 +46,7 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 ALLOWED_IMAGE_TYPES = {
     "image/jpeg",
     "image/png",
-    "image/webp"
+    "image/webp",
 }
 
 
@@ -45,6 +59,10 @@ async def count_likes(db: AsyncSession, post_id: int) -> int:
     return result.scalar_one()
 
 
+# =========================
+# GET LIKE STATUS
+# =========================
+
 @router.get("/{post_id}/like-status")
 async def get_like_status(
     post_id: int,
@@ -54,7 +72,6 @@ async def get_like_status(
     result = await db.execute(
         select(Post.id).where(Post.id == post_id)
     )
-
     post_exists = result.scalar_one_or_none()
 
     if post_exists is None:
@@ -69,7 +86,6 @@ async def get_like_status(
             Like.user_id == current_user.id,
         )
     )
-
     like_exists = result.scalar_one_or_none()
 
     return {
@@ -78,66 +94,105 @@ async def get_like_status(
     }
 
 
+# =========================
+# CREATE A POST
+# =========================
+
 @router.post("/", response_model=PostResponse)
 async def create_post(
-    request : Request,
+    request: Request,
     image: UploadFile = File(...),
     caption: str | None = Form(None),
     current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     if image.content_type not in ALLOWED_IMAGE_TYPES:
+        await image.close()
         raise HTTPException(
             status_code=400,
-            detail="Only JPEG, PNG, and WebP images are allowed"
+            detail="Only JPEG, PNG, and WebP images are allowed",
         )
 
     filename = image.filename
 
     if filename is None:
-       raise HTTPException(
-        status_code=400,
-        detail="Uploaded image must have a filename",
-    )
+        await image.close()
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded image must have a filename",
+        )
 
-    file_extension = Path(filename).suffix
+    file_extension = Path(filename).suffix.lower()
+
+    # Validate the extension as well as the MIME type.
+    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp"}
+
+    if file_extension not in allowed_extensions:
+        await image.close()
+        raise HTTPException(
+            status_code=400,
+            detail="Unsupported image file extension",
+        )
+
     unique_filename = f"{uuid.uuid4()}{file_extension}"
-
     file_path = UPLOAD_DIR / unique_filename
 
+    try:
+        image_data = await image.read()
+    finally:
+        await image.close()
+
+    if not image_data:
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded image is empty",
+        )
+
     with file_path.open("wb") as buffer:
-        buffer.write(await image.read())
+        buffer.write(image_data)
 
     new_post = Post(
         user_id=current_user.id,
         image=str(file_path),
-        caption=caption
+        caption=caption,
     )
 
-    db.add(new_post)
+    try:
+        db.add(new_post)
+        await db.commit()
+        await db.refresh(new_post)
+    except Exception:
+        await db.rollback()
+        file_path.unlink(missing_ok=True)
+        raise
 
-    await db.commit()
-
-    await db.refresh(new_post)
-
-    return  {
-    "id": new_post.id,
-    "user_id": new_post.user_id,
-    "image": new_post.image,
-    "image_url": build_image_url(request, new_post.image),
-    "caption": new_post.caption,
-    "created_at": new_post.created_at
-}
+    return {
+        "id": new_post.id,
+        "user_id": new_post.user_id,
+        "username": current_user.username,
+        "profile_picture": current_user.profile_picture,
+        "image": new_post.image,
+        "image_url": build_image_url(request, new_post.image),
+        "caption": new_post.caption,
+        "created_at": new_post.created_at,
+    }
 
 
+# =========================
+# GET ALL POSTS / FEED
+# =========================
 
 @router.get("/", response_model=list[PostResponse])
 async def get_posts(
     request: Request,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
-        select(Post, User.username)
+        select(
+            Post,
+            User.username,
+            User.profile_picture,
+        )
         .join(User, Post.user_id == User.id)
         .order_by(Post.created_at.desc())
     )
@@ -149,44 +204,61 @@ async def get_posts(
             "id": post.id,
             "user_id": post.user_id,
             "username": username,
+            "profile_picture": profile_picture,
             "image": post.image,
             "image_url": build_image_url(request, post.image),
             "caption": post.caption,
             "created_at": post.created_at,
         }
-        for post, username in rows
+        for post, username, profile_picture in rows
     ]
 
+
+# =========================
+# GET A SINGLE POST
+# =========================
 
 @router.get("/{post_id}", response_model=PostResponse)
 async def get_post(
     post_id: int,
     request: Request,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
-        select(Post).where(Post.id == post_id)
+        select(
+            Post,
+            User.username,
+            User.profile_picture,
+        )
+        .join(User, Post.user_id == User.id)
+        .where(Post.id == post_id)
     )
 
-    post = result.scalar_one_or_none()
+    row = result.one_or_none()
 
-    if post is None:
+    if row is None:
         raise HTTPException(
             status_code=404,
-            detail="Post not found"
+            detail="Post not found",
         )
+
+    post, username, profile_picture = row
 
     return {
         "id": post.id,
         "user_id": post.user_id,
+        "username": username,
+        "profile_picture": profile_picture,
         "image": post.image,
         "image_url": build_image_url(request, post.image),
         "caption": post.caption,
-        "created_at": post.created_at
+        "created_at": post.created_at,
     }
 
 
-
+# =========================
+# DELETE A POST
+# =========================
 
 @router.delete("/{post_id}")
 async def delete_post(
@@ -194,30 +266,25 @@ async def delete_post(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    # 1. Find the post
     result = await db.execute(
         select(Post).where(Post.id == post_id)
     )
     post = result.scalar_one_or_none()
 
-    # 2. Check whether the post exists
     if post is None:
         raise HTTPException(
             status_code=404,
             detail="Post not found",
         )
 
-    # 3. Check post ownership
     if post.user_id != current_user.id:
         raise HTTPException(
             status_code=403,
             detail="You are not allowed to delete this post",
         )
 
-    # 4. Save the image path before deleting the database record
     image_path = Path(post.image)
 
-    # 5. Delete related records and the post in one transaction
     try:
         await db.execute(
             delete(Like).where(Like.post_id == post_id)
@@ -234,11 +301,9 @@ async def delete_post(
         await db.rollback()
         raise
 
-    # 6. Delete the image only after the database commit succeeds
     try:
         if image_path.is_file():
             image_path.unlink()
-
     except OSError:
         import logging
 
@@ -247,36 +312,38 @@ async def delete_post(
             image_path,
         )
 
-    # 7. Return the success response
     return {
         "message": "Post deleted successfully"
     }
 
 
+# =========================
+# UPDATE A POST
+# =========================
+
 @router.put("/{post_id}", response_model=PostResponse)
 async def update_post(
     post_id: int,
     post_data: PostUpdate,
-    request : Request,
+    request: Request,
     current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
         select(Post).where(Post.id == post_id)
     )
-
     post = result.scalar_one_or_none()
 
     if post is None:
         raise HTTPException(
             status_code=404,
-            detail="Post not found"
+            detail="Post not found",
         )
 
     if post.user_id != current_user.id:
         raise HTTPException(
             status_code=403,
-            detail="You are not allowed to edit this post"
+            detail="You are not allowed to edit this post",
         )
 
     post.caption = post_data.caption
@@ -284,16 +351,31 @@ async def update_post(
     await db.commit()
     await db.refresh(post)
 
+    result = await db.execute(
+        select(User.username, User.profile_picture).where(
+            User.id == post.user_id
+        )
+    )
+    author = result.one_or_none()
+
+    if author is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Post author not found",
+        )
+
+    username, profile_picture = author
+
     return {
-    "id": post.id,
-    "user_id": post.user_id,
-    "image": post.image,
-    "image_url": build_image_url(request, post.image),
-    "caption": post.caption,
-    "created_at": post.created_at
-}
-
-
+        "id": post.id,
+        "user_id": post.user_id,
+        "username": username,
+        "profile_picture": profile_picture,
+        "image": post.image,
+        "image_url": build_image_url(request, post.image),
+        "caption": post.caption,
+        "created_at": post.created_at,
+    }
 
 
 # =========================
@@ -312,7 +394,10 @@ async def like_post(
     post = result.scalar_one_or_none()
 
     if post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found",
+        )
 
     result = await db.execute(
         select(Like).where(
@@ -332,17 +417,17 @@ async def like_post(
         user_id=current_user.id,
         post_id=post_id,
     )
-
     db.add(new_like)
 
-    await create_notification(
-    db=db,
-    recipient_id=post.user_id,
-    sender_id=current_user.id,
-    notification_type="like",
-    message=f"{current_user.username} liked your post.",
-    post_id=post.id,
-    )
+    if post.user_id != current_user.id:
+        await create_notification(
+            db=db,
+            recipient_id=post.user_id,
+            sender_id=current_user.id,
+            notification_type="like",
+            message=f"{current_user.username} liked your post.",
+            post_id=post.id,
+        )
 
     await db.commit()
 
@@ -368,7 +453,10 @@ async def unlike_post(
     post = result.scalar_one_or_none()
 
     if post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found",
+        )
 
     result = await db.execute(
         select(Like).where(
@@ -413,7 +501,10 @@ async def create_comment(
     post = result.scalar_one_or_none()
 
     if post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found",
+        )
 
     content = comment_data.content.strip()
 
@@ -431,14 +522,15 @@ async def create_comment(
 
     db.add(new_comment)
 
-    await create_notification(
-    db=db,
-    recipient_id=post.user_id,
-    sender_id=current_user.id,
-    notification_type="comment",
-    message=f"{current_user.username} commented on your post.",
-    post_id=post.id,
-)
+    if post.user_id != current_user.id:
+        await create_notification(
+            db=db,
+            recipient_id=post.user_id,
+            sender_id=current_user.id,
+            notification_type="comment",
+            message=f"{current_user.username} commented on your post.",
+            post_id=post.id,
+        )
 
     await db.commit()
     await db.refresh(new_comment)
@@ -448,6 +540,7 @@ async def create_comment(
         "post_id": new_comment.post_id,
         "user_id": new_comment.user_id,
         "username": current_user.username,
+        "profile_picture": current_user.profile_picture,
         "content": new_comment.content,
         "created_at": new_comment.created_at,
     }
@@ -466,15 +559,22 @@ async def get_comments(
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
-        select(Post).where(Post.id == post_id)
+        select(Post.id).where(Post.id == post_id)
     )
-    post = result.scalar_one_or_none()
+    post_exists = result.scalar_one_or_none()
 
-    if post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+    if post_exists is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found",
+        )
 
     result = await db.execute(
-        select(Comment, User.username)
+        select(
+            Comment,
+            User.username,
+            User.profile_picture,
+        )
         .join(User, Comment.user_id == User.id)
         .where(Comment.post_id == post_id)
         .order_by(Comment.created_at.asc())
@@ -488,10 +588,11 @@ async def get_comments(
             "post_id": comment.post_id,
             "user_id": comment.user_id,
             "username": username,
+            "profile_picture": profile_picture,
             "content": comment.content,
             "created_at": comment.created_at,
         }
-        for comment, username in rows
+        for comment, username, profile_picture in rows
     ]
 
 
@@ -516,22 +617,15 @@ async def delete_comment(
             detail="Comment not found",
         )
 
-    ownership_result = await db.execute(
-    select(Comment.id).where(
-        Comment.id == comment_id,
-        Comment.user_id == current_user.id,
-    )
-)
-
-    owns_comment = ownership_result.scalar_one_or_none()
-
-    if owns_comment is None:
-       raise HTTPException(
-        status_code=403,
-        detail="You can only delete your own comments",
-    )
+    if comment.user_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own comments",
+        )
 
     await db.delete(comment)
     await db.commit()
 
-    return {"message": "Comment deleted successfully"}
+    return {
+        "message": "Comment deleted successfully"
+    }

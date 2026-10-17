@@ -206,15 +206,15 @@ async def get_followers(
     await get_user_or_404(user_id, db)
 
     result = await db.execute(
-        select(User.id, User.username)
+        select(User.id, User.username, User.profile_picture)
         .join(Follow, Follow.follower_id == User.id)
         .where(Follow.followed_id == user_id)
         .order_by(Follow.created_at.desc())
     )
 
     return [
-        {"id": user_id, "username": username}
-        for user_id, username in result.all()
+        {"id": user_id, "username": username, "profile_picture": profile_picture}
+        for user_id, username, profile_picture in result.all()
     ]
 
 
@@ -231,13 +231,13 @@ async def get_following(
     await get_user_or_404(user_id, db)
 
     result = await db.execute(
-        select(User.id, User.username)
+        select(User.id, User.username, User.profile_picture)
         .join(Follow, Follow.followed_id == User.id)
         .where(Follow.follower_id == user_id)
         .order_by(Follow.created_at.desc())
     )
 
     return [
-        {"id": followed_user_id, "username": username}
-        for followed_user_id, username in result.all()
+        {"id": followed_user_id, "username": username, "profile_picture": profile_picture}
+        for followed_user_id, username, profile_picture in result.all()
     ]
